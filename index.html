@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>beautyguide. — Your Personal Skincare, Beauty & Self-Care Educational Platform</title>
+  <meta name="description" content="Platform edukasi modern seputar perawatan diri, skincare, panduan creator, formula bahan aktif, dan kuis diagnosis kondisi kulit AI.">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              cream: '#FAF8F5',
+              surface: '#F4EFEA',
+              card: '#FFFFFF',
+              dark: '#25201D',
+              muted: '#756D67',
+              border: '#EAE3D9',
+              warm: '#C49A78',
+              warmDark: '#845E3D',
+              sage: '#7B8F77',
+            }
+          },
+          fontFamily: {
+            serif: ['Playfair Display', 'Georgia', 'serif'],
+            sans: ['Plus Jakarta Sans', 'system-ui', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>✨</text></svg>">
+</head>
+<body class="bg-[#FAF8F5] text-[#25201D] font-sans antialiased min-h-screen flex flex-col selection:bg-[#EBDDCF] selection:text-[#25201D]">
+
+  <!-- ========================================================== -->
+  <!-- 1. NAVIGATION BAR (Faithful to Reference Image)            -->
+  <!-- ========================================================== -->
+  <header class="sticky top-0 z-40 glass-nav transition-all duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+      
+      <!-- Logo: (b.) beautyguide. -->
+      <a href="#home" data-nav="home" class="flex items-center gap-2 group cursor-pointer text-stone-900">
+        <span class="w-8 h-8 rounded-full border border-stone-800 flex items-center justify-center font-serif text-sm font-semibold group-hover:bg-stone-900 group-hover:text-white transition-colors">
+          b.
+        </span>
+        <span class="font-serif text-xl sm:text-2xl font-bold tracking-tight">
+          beautyguide.
+        </span>
+      </a>
+
+      <!-- Desktop Nav Items: Home | Catalog | Guide (Creator) | Beauty Quiz -->
+      <nav class="hidden md:flex items-center space-x-8 text-sm font-medium text-stone-600">
+        <a href="#home" data-nav="home" class="nav-tab hover:text-stone-900 transition-colors py-1">
+          Home
+        </a>
+        <a href="#catalog" data-nav="catalog" class="nav-tab hover:text-stone-900 transition-colors py-1">
+          Catalog
+        </a>
+        <a href="#creator" data-nav="creator" class="nav-tab hover:text-stone-900 transition-colors py-1">
+          Guide
+        </a>
+        <a href="#quiz" data-nav="quiz" class="nav-tab hover:text-stone-900 transition-colors py-1">
+          Beauty Quiz
+        </a>
+      </nav>
+
+      <!-- Right Header Actions: Search, Wishlist/Heart, & CTA -->
+      <div class="flex items-center space-x-3 sm:space-x-4">
+        <!-- Search Trigger -->
+        <button 
+          onclick="openSearchModal()" 
+          title="Cari Edukasi & Produk (Ctrl+K)"
+          class="p-2 text-stone-700 hover:text-stone-900 hover:bg-stone-100 rounded-full transition-colors flex items-center justify-center"
+        >
+          <svg class="w-5 h-5 stroke-[1.75]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+          </svg>
+        </button>
+
+        <!-- Saved/Favorites Trigger -->
+        <button 
+          onclick="toggleSavedDrawer()" 
+          title="Formula Tersimpan"
+          class="p-2 text-stone-700 hover:text-stone-900 hover:bg-stone-100 rounded-full transition-colors relative flex items-center justify-center"
+        >
+          <svg class="w-5 h-5 stroke-[1.75]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+          </svg>
+          <span id="headerSavedCount" class="hidden absolute top-1 right-1 w-4 h-4 bg-stone-900 text-white rounded-full text-[10px] font-bold flex items-center justify-center">
+            0
+          </span>
+        </button>
+
+        <!-- Quick Quiz Button -->
+        <button 
+          onclick="navigateTo('quiz')" 
+          class="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-semibold bg-[#25201D] text-white hover:bg-stone-800 transition-colors shadow-2xs"
+        >
+          <span>✨ Mulai Kuis</span>
+        </button>
+
+        <!-- Mobile Menu Toggle Button -->
+        <button 
+          id="mobileMenuBtn" 
+          class="md:hidden p-2 text-stone-700 hover:text-stone-900 rounded-lg"
+          title="Menu"
+        >
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+          </svg>
+        </button>
+      </div>
+
+    </div>
+
+    <!-- Mobile Nav Menu Dropdown -->
+    <div id="mobileNavMenu" class="hidden md:hidden border-t border-stone-200 bg-[#FAF8F5] px-4 pt-3 pb-5 space-y-2">
+      <a href="#home" data-nav="home" class="block py-2 text-sm font-medium text-stone-800 hover:text-stone-950">Home</a>
+      <a href="#catalog" data-nav="catalog" class="block py-2 text-sm font-medium text-stone-800 hover:text-stone-950">Catalog Skincare</a>
+      <a href="#creator" data-nav="creator" class="block py-2 text-sm font-medium text-stone-800 hover:text-stone-950">Guide & Video Creator</a>
+      <a href="#quiz" data-nav="quiz" class="block py-2 text-sm font-medium text-stone-800 hover:text-stone-950">Beauty Quiz (AI Skin Diagnostic)</a>
+      <div class="pt-2">
+        <button onclick="navigateTo('quiz')" class="w-full py-2.5 rounded-full text-xs font-semibold bg-stone-900 text-white text-center">
+          Mulai AI Skin Quiz
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="flex-grow">
+
+    <!-- ========================================================== -->
+    <!-- PAGE 1: DASHBOARD / HOME (Matches Reference Image)         -->
+    <!-- ========================================================== -->
+    <section id="page-home" class="page-view animate-fade-in">
+      
+      <!-- HERO SECTION (Exact composition to reference) -->
+      <div class="relative overflow-hidden pt-8 pb-16 lg:pt-14 lg:pb-24 border-b border-stone-200/70">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-8 items-center">
+            
+            <!-- Left Hero Content -->
+            <div class="lg:col-span-6 space-y-6">
+              <!-- Discover Badge -->
+              <p class="text-[11px] sm:text-xs font-bold tracking-[0.22em] text-[#786D65] uppercase">
+                DISCOVER · LEARN · FIND YOUR MATCH
+              </p>
+
+              <!-- Main Heading in Serif font matching reference -->
+              <h1 class="font-serif text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-[#25201D] leading-[1.12]">
+                Find what<br>works for you.
+              </h1>
+
+              <!-- Subtitle -->
+              <p class="text-base sm:text-lg text-[#6E655F] leading-relaxed max-w-xl font-normal">
+                Your personal guide to skincare, makeup, and everyday beauty. Thoughtful choices start here.
+              </p>
+
+              <!-- CTA Buttons matching reference design -->
+              <div class="flex flex-wrap items-center gap-3.5 pt-2">
+                <!-- Primary Pill Button -->
+                <button 
+                  onclick="navigateTo('creator')" 
+                  class="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-[#25201D] text-white text-sm font-medium hover:bg-stone-800 transition-all shadow-sm group"
+                >
+                  <span>Explore the guide</span>
+                  <span class="group-hover:translate-x-1 transition-transform">→</span>
+                </button>
+
+                <!-- Secondary Outline Button with Sparkle Icon -->
+                <button 
+                  onclick="navigateTo('quiz')" 
+                  class="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl border border-stone-300 bg-white/70 backdrop-blur-xs text-[#25201D] text-sm font-medium hover:bg-white hover:border-stone-400 transition-all shadow-2xs"
+                >
+                  <svg class="w-4 h-4 text-[#C49A78]" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 2l2.4 7.2L21.6 12l-7.2 2.4L12 21.6l-2.4-7.2L2.4 12l7.2-2.4z"/>
+                  </svg>
+                  <span>Take the quiz</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Right Hero Image Showcase -->
+            <div class="lg:col-span-6 relative">
+              <div class="relative rounded-3xl overflow-hidden shadow-xl border border-stone-200/90 aspect-[4/3] bg-stone-100">
+                <img 
+                  src="assets/images/hero.jpg" 
+                  alt="Minimalist luxury skincare products on travertine stone" 
+                  class="w-full h-full object-cover object-center"
+                />
+                
+                <!-- Floating Glassmorphic Info Badge -->
+                <div class="absolute bottom-5 left-5 right-5 sm:left-6 sm:right-auto glass-panel p-4 rounded-2xl max-w-sm shadow-md animate-fade-in">
+                  <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-full bg-[#FAF6F0] border border-[#E8DFD3] flex items-center justify-center text-[#845E3D] shrink-0 font-serif font-bold text-base">
+                      b.
+                    </div>
+                    <div>
+                      <p class="text-xs font-semibold text-stone-900">Mindful Beauty Education</p>
+                      <p class="text-[11px] text-stone-500">Belajar memahami apa yang sebenarnya dibutuhkan kulitmu.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Decorative Soft Background Blob -->
+              <div class="absolute -top-10 -right-10 w-72 h-72 bg-[#EFE7DC] rounded-full filter blur-3xl opacity-50 -z-10 pointer-events-none"></div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- ========================================================== -->
+      <!-- SECTION: WHERE TO BEGIN (Matching the Reference bottom text) -->
+      <!-- ========================================================== -->
+      <div class="py-16 sm:py-20 border-b border-stone-200/70 bg-[#FAF8F5]">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          
+          <div class="text-center max-w-2xl mx-auto mb-14">
+            <span class="text-xs font-bold tracking-[0.25em] text-[#845E3D] uppercase block mb-2">
+              WHERE TO BEGIN
+            </span>
+            <h2 class="font-serif text-3xl sm:text-4xl font-bold text-stone-900 mb-3">
+              4 Pilar Utama Perawatan Kulit Sejati
+            </h2>
+            <p class="text-stone-600 text-sm sm:text-base">
+              Sebelum memilih beragam produk, mulailah dengan memahami pondasi dasar kesehatan kulitmu.
+            </p>
+          </div>
+
+          <!-- 4 Pillars Grid -->
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <!-- Pillar 1 -->
+            <div class="bg-white p-6 sm:p-7 rounded-2xl border border-stone-200/80 card-hover flex flex-col justify-between">
+              <div>
+                <span class="text-3xl block mb-4">🛡️</span>
+                <span class="text-[11px] font-bold text-stone-400 uppercase tracking-wider block mb-1">Pilar 01</span>
+                <h3 class="font-serif text-lg font-bold text-stone-900 mb-2">Skin Barrier Health</h3>
+                <p class="text-xs sm:text-sm text-stone-600 leading-relaxed mb-4">
+                  Dinding pelindung kulit adalah pertahanan utama dari bakteri dan hilangnya kelembapan. Tanpa barrier yang sehat, bahan aktif apa pun tidak akan bekerja optimal.
+                </p>
+              </div>
+              <a href="#creator" onclick="navigateTo('creator')" class="text-xs font-semibold text-[#845E3D] hover:underline flex items-center gap-1">
+                Pelajari Barrier 101 →
+              </a>
+            </div>
+
+            <!-- Pillar 2 -->
+            <div class="bg-white p-6 sm:p-7 rounded-2xl border border-stone-200/80 card-hover flex flex-col justify-between">
+              <div>
+                <span class="text-3xl block mb-4">🧪</span>
+                <span class="text-[11px] font-bold text-stone-400 uppercase tracking-wider block mb-1">Pilar 02</span>
+                <h3 class="font-serif text-lg font-bold text-stone-900 mb-2">Active Ingredients</h3>
+                <p class="text-xs sm:text-sm text-stone-600 leading-relaxed mb-4">
+                  Bahan aktif seperti Retinol, Niacinamide, atau BHA memiliki cara kerja spesifik. Kenali persentase yang aman serta aturan kombinasi antar bahan.
+                </p>
+              </div>
+              <a href="#catalog" onclick="navigateTo('catalog')" class="text-xs font-semibold text-[#845E3D] hover:underline flex items-center gap-1">
+                Eksplor Formula →
+              </a>
+            </div>
+
+            <!-- Pillar 3 -->
+            <div class="bg-white p-6 sm:p-7 rounded-2xl border border-stone-200/80 card-hover flex flex-col justify-between">
+              <div>
+                <span class="text-3xl block mb-4">🌿</span>
+                <span class="text-[11px] font-bold text-stone-400 uppercase tracking-wider block mb-1">Pilar 03</span>
+                <h3 class="font-serif text-lg font-bold text-stone-900 mb-2">Skinimalism</h3>
+                <p class="text-xs sm:text-sm text-stone-600 leading-relaxed mb-4">
+                  Kamu tidak membutuhkan 10 tahapan setiap hari. Filosofi "Less is More" menjaga kulit tetap seimbang tanpa risiko iritasi akibat penumpukan formula.
+                </p>
+              </div>
+              <a href="#creator" onclick="navigateTo('creator')" class="text-xs font-semibold text-[#845E3D] hover:underline flex items-center gap-1">
+                Lihat Panduan Rutin →
+              </a>
+            </div>
+
+            <!-- Pillar 4 -->
+            <div class="bg-white p-6 sm:p-7 rounded-2xl border border-stone-200/80 card-hover flex flex-col justify-between">
+              <div>
+                <span class="text-3xl block mb-4">☀️</span>
+                <span class="text-[11px] font-bold text-stone-400 uppercase tracking-wider block mb-1">Pilar 04</span>
+                <h3 class="font-serif text-lg font-bold text-stone-900 mb-2">Daily Sun Protection</h3>
+                <p class="text-xs sm:text-sm text-stone-600 leading-relaxed mb-4">
+                  80% penuaan dini dan masalah hiperpigmentasi disebabkan oleh radiasi UV. Sunscreen adalah investasi perawatan terbaik yang wajib dipakai setiap pagi.
+                </p>
+              </div>
+              <a href="#quiz" onclick="navigateTo('quiz')" class="text-xs font-semibold text-[#845E3D] hover:underline flex items-center gap-1">
+                Tes Kebutuhan UV →
+              </a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ========================================================== -->
+      <!-- SECTION: INGREDIENT MATRIX & EDU-PEDIA                     -->
+      <!-- ========================================================== -->
+      <div class="py-16 sm:py-20 border-b border-stone-200/70 bg-[#F6F2EC]/60">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          
+          <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
+            <div>
+              <span class="text-xs font-bold tracking-[0.2em] text-[#845E3D] uppercase block mb-1">
+                EDU-PEDIA KANDUNGAN
+              </span>
+              <h2 class="font-serif text-3xl font-bold text-stone-900">
+                Pahami Cara Kerja Bahan Aktif Skincare
+              </h2>
+            </div>
+            <p class="text-xs sm:text-sm text-stone-600 max-w-md">
+              Klik bahan aktif di bawah untuk mempelajari fungsinya, waktu pemakaian optimal, serta pasangan yang aman vs dilarang.
+            </p>
+          </div>
+
+          <!-- Ingredients Horizontal Tabs Bar -->
+          <div id="ingredientTabsContainer" class="flex items-center gap-2 overflow-x-auto pb-4 mb-6 scrollbar-none">
+            <!-- Dynamically populated from data.js -->
+          </div>
+
+          <!-- Ingredient Detail Box -->
+          <div id="ingredientDetailBox" class="bg-white rounded-3xl p-6 sm:p-8 border border-stone-200/80 shadow-xs">
+            <!-- Dynamically rendered by renderIngredientDetail() -->
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ========================================================== -->
+      <!-- SECTION: MORNING VS EVENING ROUTINE TIMELINE               -->
+      <!-- ========================================================== -->
+      <div class="py-16 sm:py-20 border-b border-stone-200/70 bg-[#FAF8F5]">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          
+          <div class="text-center max-w-2xl mx-auto mb-10">
+            <span class="text-xs font-bold tracking-[0.2em] text-[#845E3D] uppercase block mb-1">
+              RITUAL HARIAN
+            </span>
+            <h2 class="font-serif text-3xl font-bold text-stone-900 mb-2">
+              Urutan Rutinitas yang Tepat
+            </h2>
+            <p class="text-xs sm:text-sm text-stone-600">
+              Kulit memiliki ritme biologis berbeda: Melindungi di pagi hari, Memperbaiki di malam hari.
+            </p>
+
+            <!-- Routine Tabs Toggle -->
+            <div class="inline-flex p-1 bg-stone-100 rounded-full border border-stone-200 mt-6">
+              <button 
+                id="routineTabAM" 
+                onclick="switchRoutineTab('am')"
+                class="px-6 py-2 rounded-full text-xs font-semibold bg-stone-900 text-white transition-all"
+              >
+                ☀️ Rutinitas Pagi (AM)
+              </button>
+              <button 
+                id="routineTabPM" 
+                onclick="switchRoutineTab('pm')"
+                class="px-6 py-2 rounded-full text-xs font-semibold bg-stone-100 text-stone-600 transition-all"
+              >
+                🌙 Rutinitas Malam (PM)
+              </button>
+            </div>
+          </div>
+
+          <!-- AM Content -->
+          <div id="routineContentAM" class="grid grid-cols-1 md:grid-cols-4 gap-6 animate-fade-in">
+            <div class="bg-white p-6 rounded-2xl border border-stone-200">
+              <span class="w-8 h-8 rounded-full bg-amber-50 text-amber-800 font-bold text-xs flex items-center justify-center mb-4">1</span>
+              <h4 class="font-serif font-bold text-stone-900 text-base mb-1">Cleanser Lembut</h4>
+              <p class="text-xs text-stone-600 leading-relaxed">Bersihkan keringat dan sisa minyak malam hari dengan pembersih ber-pH 5.5 tanpa busa keras.</p>
+            </div>
+            <div class="bg-white p-6 rounded-2xl border border-stone-200">
+              <span class="w-8 h-8 rounded-full bg-amber-50 text-amber-800 font-bold text-xs flex items-center justify-center mb-4">2</span>
+              <h4 class="font-serif font-bold text-stone-900 text-base mb-1">Hydrating Toner</h4>
+              <p class="text-xs text-stone-600 leading-relaxed">Berikan hidrasi cepat agar kulit plumpy dan pori-pori siap menyerap nutrisi dengan baik.</p>
+            </div>
+            <div class="bg-white p-6 rounded-2xl border border-stone-200">
+              <span class="w-8 h-8 rounded-full bg-amber-50 text-amber-800 font-bold text-xs flex items-center justify-center mb-4">3</span>
+              <h4 class="font-serif font-bold text-stone-900 text-base mb-1">Pelembap Ringan</h4>
+              <p class="text-xs text-stone-600 leading-relaxed">Gunakan moisturizer berbasis gel atau emulsi untuk mengunci hidrasi tanpa membuat wajah terasa berat.</p>
+            </div>
+            <div class="bg-white p-6 rounded-2xl border border-stone-200 ring-2 ring-stone-900/10">
+              <span class="w-8 h-8 rounded-full bg-stone-900 text-white font-bold text-xs flex items-center justify-center mb-4">4</span>
+              <h4 class="font-serif font-bold text-stone-900 text-base mb-1">Sunscreen SPF 50+</h4>
+              <p class="text-xs text-stone-600 leading-relaxed">Langkah terpenting! Oleskan 2 ruas jari secara merata ke wajah & leher untuk mencegah photoaging.</p>
+            </div>
+          </div>
+
+          <!-- PM Content (Hidden by default) -->
+          <div id="routineContentPM" class="hidden grid grid-cols-1 md:grid-cols-4 gap-6 animate-fade-in">
+            <div class="bg-white p-6 rounded-2xl border border-stone-200">
+              <span class="w-8 h-8 rounded-full bg-indigo-50 text-indigo-800 font-bold text-xs flex items-center justify-center mb-4">1</span>
+              <h4 class="font-serif font-bold text-stone-900 text-base mb-1">Double Cleansing</h4>
+              <p class="text-xs text-stone-600 leading-relaxed">Luruhkan debu, sebum, makeup, dan sunscreen tahan air menggunakan cleansing balm/oil sebelum sabun cuci muka.</p>
+            </div>
+            <div class="bg-white p-6 rounded-2xl border border-stone-200">
+              <span class="w-8 h-8 rounded-full bg-indigo-50 text-indigo-800 font-bold text-xs flex items-center justify-center mb-4">2</span>
+              <h4 class="font-serif font-bold text-stone-900 text-base mb-1">Calming Toner</h4>
+              <p class="text-xs text-stone-600 leading-relaxed">Menenangkan kulit setelah stres terpapar polusi dengan kandungan Green Tea atau Centella Asiatica.</p>
+            </div>
+            <div class="bg-white p-6 rounded-2xl border border-stone-200">
+              <span class="w-8 h-8 rounded-full bg-indigo-50 text-indigo-800 font-bold text-xs flex items-center justify-center mb-4">3</span>
+              <h4 class="font-serif font-bold text-stone-900 text-base mb-1">Serum / Retinol (Jadwal)</h4>
+              <p class="text-xs text-stone-600 leading-relaxed">Gunakan bahan aktif reparasi sel (misal Retinol atau BHA) 2-3 kali seminggu pada malam hari secara bergantian.</p>
+            </div>
+            <div class="bg-white p-6 rounded-2xl border border-stone-200 ring-2 ring-stone-900/10">
+              <span class="w-8 h-8 rounded-full bg-stone-900 text-white font-bold text-xs flex items-center justify-center mb-4">4</span>
+              <h4 class="font-serif font-bold text-stone-900 text-base mb-1">Barrier Restoring Cream</h4>
+              <p class="text-xs text-stone-600 leading-relaxed">Krim malam dengan Ceramide & Oat untuk memperbaiki dinding kulit dan mengunci proses regenerasi sel saat tidur.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ========================================================== -->
+      <!-- SECTION: FEATURED CREATORS & PRODUCTS PREVIEWS             -->
+      <!-- ========================================================== -->
+      <div class="py-16 sm:py-20 border-b border-stone-200/70 bg-[#FAF8F5]">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          
+          <!-- Creators Preview Header -->
+          <div class="flex items-center justify-between mb-8">
+            <div>
+              <span class="text-xs font-bold tracking-[0.2em] text-[#845E3D] uppercase block mb-1">VIDEO EDUKASI</span>
+              <h2 class="font-serif text-2xl sm:text-3xl font-bold text-stone-900">Panduan Populer dari Creator & Pakar</h2>
+            </div>
+            <button onclick="navigateTo('creator')" class="text-xs sm:text-sm font-semibold text-stone-900 hover:text-[#845E3D] transition-colors">
+              Lihat Semua Video →
+            </button>
+          </div>
+
+          <div id="homeFeaturedCreators" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
+            <!-- Populated dynamically -->
+          </div>
+
+          <!-- Products Preview Header -->
+          <div class="flex items-center justify-between mb-8">
+            <div>
+              <span class="text-xs font-bold tracking-[0.2em] text-[#845E3D] uppercase block mb-1">KATALOG FORMULA</span>
+              <h2 class="font-serif text-2xl sm:text-3xl font-bold text-stone-900">Eksplorasi Formula Produk Terkurasi</h2>
+            </div>
+            <button onclick="navigateTo('catalog')" class="text-xs sm:text-sm font-semibold text-stone-900 hover:text-[#845E3D] transition-colors">
+              Buka Katalog Lengkap →
+            </button>
+          </div>
+
+          <div id="homeFeaturedProducts" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <!-- Populated dynamically -->
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ========================================================== -->
+      <!-- SECTION: BEAUTY QUIZ CTA CALLOUT BANNER                    -->
+      <!-- ========================================================== -->
+      <div class="py-16 sm:py-20 bg-[#FAF8F5]">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="relative bg-[#25201D] text-white rounded-3xl p-8 sm:p-14 overflow-hidden shadow-2xl">
+            <div class="relative z-10 max-w-2xl space-y-4">
+              <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-white/10 text-[#C49A78] backdrop-blur-xs">
+                <span>✨</span> Diagnosa Kulit AI
+              </span>
+              <h2 class="font-serif text-3xl sm:text-5xl font-bold leading-tight">
+                Bingung memilih perawatan yang cocok untuk kulitmu?
+              </h2>
+              <p class="text-stone-300 text-sm sm:text-base leading-relaxed">
+                Jawab kuis diagnosa singkat 2 menit. Simulasi AI kami akan menganalisis kekuatan skin barrier, tingkat reaktivitas, dan memberikan rekomendasi rutinitas personal yang sesuai.
+              </p>
+              <div class="pt-4 flex flex-wrap gap-4">
+                <button 
+                  onclick="navigateTo('quiz')" 
+                  class="px-7 py-3.5 rounded-xl bg-white text-stone-900 text-sm font-bold hover:bg-stone-100 transition-colors shadow-sm"
+                >
+                  Mulai Kuis Diagnosa Kulit →
+                </button>
+                <button 
+                  onclick="navigateTo('catalog')" 
+                  class="px-6 py-3.5 rounded-xl border border-white/20 text-white text-sm font-medium hover:bg-white/10 transition-colors"
+                >
+                  Lihat Katalog Edukasi
+                </button>
+              </div>
+            </div>
+
+            <!-- Soft Decorative elements -->
+            <div class="absolute -right-20 -bottom-20 w-96 h-96 bg-[#C49A78]/20 rounded-full blur-3xl pointer-events-none"></div>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ========================================================== -->
+    <!-- PAGE 2: CREATOR (Guide & Video Edukasi)                    -->
+    <!-- ========================================================== -->
+    <section id="page-creator" class="page-view hidden py-12 sm:py-16">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <!-- Header Section -->
+        <div class="max-w-3xl mb-10">
+          <span class="text-xs font-bold tracking-[0.2em] text-[#845E3D] uppercase block mb-1">
+            CREATOR & EXPERT GUIDES
+          </span>
+          <h1 class="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-stone-900 mb-3">
+            Video Edukasi dari Dermatolog & Kreator Kecantikan
+          </h1>
+          <p class="text-sm sm:text-base text-stone-600 leading-relaxed">
+            Belajar langsung melalui panduan video komprehensif seputar perbaikan skin barrier, cara tepat menggunakan bahan aktif, teknik pembersihan wajah, dan tips kecantikan sehari-hari.
+          </p>
+        </div>
+
+        <!-- Category Filters Bar -->
+        <div class="flex items-center gap-2 overflow-x-auto pb-4 mb-8 scrollbar-none">
+          <button 
+            onclick="filterCreatorCategory('all', this)" 
+            class="creator-filter-btn px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap border bg-stone-900 text-white border-stone-900 shadow-2xs"
+          >
+            Semua Video
+          </button>
+          <button 
+            onclick="filterCreatorCategory('Skin Barrier', this)" 
+            class="creator-filter-btn px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap border bg-white text-stone-700 border-stone-200 hover:border-stone-400"
+          >
+            Skin Barrier
+          </button>
+          <button 
+            onclick="filterCreatorCategory('Rutinitas Pagi', this)" 
+            class="creator-filter-btn px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap border bg-white text-stone-700 border-stone-200 hover:border-stone-400"
+          >
+            Rutinitas Pagi
+          </button>
+          <button 
+            onclick="filterCreatorCategory('Bahan Aktif', this)" 
+            class="creator-filter-btn px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap border bg-white text-stone-700 border-stone-200 hover:border-stone-400"
+          >
+            Bahan Aktif (Retinol & Acid)
+          </button>
+          <button 
+            onclick="filterCreatorCategory('Acne & Jerawat', this)" 
+            class="creator-filter-btn px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap border bg-white text-stone-700 border-stone-200 hover:border-stone-400"
+          >
+            Acne & Jerawat
+          </button>
+          <button 
+            onclick="filterCreatorCategory('Proteksi UV', this)" 
+            class="creator-filter-btn px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap border bg-white text-stone-700 border-stone-200 hover:border-stone-400"
+          >
+            Proteksi UV
+          </button>
+          <button 
+            onclick="filterCreatorCategory('Pemula (Basic 101)', this)" 
+            class="creator-filter-btn px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap border bg-white text-stone-700 border-stone-200 hover:border-stone-400"
+          >
+            Pemula (Basic 101)
+          </button>
+        </div>
+
+        <!-- Video Cards Grid -->
+        <div id="creatorVideosGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
+          <!-- Populated dynamically via renderCreatorVideos() -->
+        </div>
+
+        <!-- Creator Spotlight Banner -->
+        <div class="bg-[#FAF7F2] rounded-3xl p-8 sm:p-10 border border-stone-200 flex flex-col md:flex-row items-center justify-between gap-6">
+          <div class="max-w-xl">
+            <h3 class="font-serif text-2xl font-bold text-stone-900 mb-2">Ingin Membagikan Konten Edukasi Skincare?</h3>
+            <p class="text-xs sm:text-sm text-stone-600 leading-relaxed">
+              Kami menyambut kolaborasi bersama dokter spesialis kulit, dermatolog, dan skin formulator terverifikasi untuk mengedukasi masyarakat mengenai perawatan kulit berbasis fakta.
+            </p>
+          </div>
+          <button onclick="showToast('Terima kasih atas minatmu! Fitur submission creator akan segera dibuka.', 'info')" class="px-6 py-3 rounded-full text-xs font-semibold bg-stone-900 text-white hover:bg-stone-800 transition-colors whitespace-nowrap">
+            Ajukan Konten Edukasi →
+          </button>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ========================================================== -->
+    <!-- PAGE 3: PRODUCT (Katalog Skincare Edukatif)                 -->
+    <!-- ========================================================== -->
+    <section id="page-catalog" class="page-view hidden py-12 sm:py-16">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <!-- Header Section with Non-Commercial Disclaimer -->
+        <div class="max-w-3xl mb-8">
+          <span class="text-xs font-bold tracking-[0.2em] text-[#845E3D] uppercase block mb-1">
+            KATALOG FORMULA EDUKATIF
+          </span>
+          <h1 class="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-stone-900 mb-3">
+            Eksplorasi Komposisi & Karakteristik Produk
+          </h1>
+          <p class="text-sm sm:text-base text-stone-600 leading-relaxed mb-4">
+            Pelajari tekstur, kandungan aktif kunci, dan cara pengaplikasian setiap produk. Temukan formulasi yang selaras dengan kebutuhan barrier kulitmu.
+          </p>
+
+          <!-- Non-Commercial Disclaimer Box -->
+          <div class="bg-[#F6EFEB] border border-[#E4D7CC] rounded-2xl p-4 flex items-start gap-3 text-xs text-[#634E3F]">
+            <span class="text-base shrink-0">ℹ️</span>
+            <div>
+              <strong class="font-semibold text-stone-900 block mb-0.5">Catatan Penting — Hanya untuk Panduan & Edukasi:</strong>
+              Produk-produk di bawah ini disajikan murni sebagai referensi pembelajaran formula skincare. Platform ini <em>tidak menyediakan keranjang belanja, checkout, maupun penjualan langsung</em>.
+            </div>
+          </div>
+        </div>
+
+        <!-- Filter & Search Controls -->
+        <div class="bg-white p-5 rounded-2xl border border-stone-200 mb-8 space-y-4">
+          <!-- Search Bar -->
+          <div class="relative">
+            <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-stone-400">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+            </span>
+            <input 
+              id="catalogSearchInput" 
+              type="text" 
+              placeholder="Cari nama produk, brand, atau bahan aktif (misal: Ceramide, BHA, SPF)..."
+              oninput="handleProductSearch(this.value)"
+              class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-stone-200 text-xs sm:text-sm focus:outline-none focus:border-stone-800 bg-[#FAF8F5]"
+            />
+          </div>
+
+          <!-- Category Buttons -->
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-[11px] font-bold text-stone-400 uppercase tracking-wider">Kategori Skincare:</span>
+              <button onclick="resetProductFilters()" class="text-xs text-stone-500 hover:text-stone-900 font-medium">
+                Reset Filter ↺
+              </button>
+            </div>
+            <div class="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
+              <button onclick="filterProductCategory('all', this)" data-cat="all" class="prod-cat-btn px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap border bg-stone-900 text-white border-stone-900">
+                Semua
+              </button>
+              <button onclick="filterProductCategory('Cleanser', this)" data-cat="Cleanser" class="prod-cat-btn px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap border bg-white text-stone-700 border-stone-200 hover:border-stone-400">
+                Cleanser
+              </button>
+              <button onclick="filterProductCategory('Toner', this)" data-cat="Toner" class="prod-cat-btn px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap border bg-white text-stone-700 border-stone-200 hover:border-stone-400">
+                Toner & Essence
+              </button>
+              <button onclick="filterProductCategory('Serum', this)" data-cat="Serum" class="prod-cat-btn px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap border bg-white text-stone-700 border-stone-200 hover:border-stone-400">
+                Serum
+              </button>
+              <button onclick="filterProductCategory('Moisturizer', this)" data-cat="Moisturizer" class="prod-cat-btn px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap border bg-white text-stone-700 border-stone-200 hover:border-stone-400">
+                Moisturizer
+              </button>
+              <button onclick="filterProductCategory('Sunscreen', this)" data-cat="Sunscreen" class="prod-cat-btn px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap border bg-white text-stone-700 border-stone-200 hover:border-stone-400">
+                Sunscreen
+              </button>
+            </div>
+          </div>
+
+          <!-- Skin Concern Filters -->
+          <div class="pt-2 border-t border-stone-100 flex items-center gap-2 overflow-x-auto scrollbar-none text-xs">
+            <span class="text-[11px] font-bold text-stone-400 uppercase tracking-wider shrink-0 mr-1">Target Masalah:</span>
+            <button onclick="filterProductConcern('all', this)" data-concern="all" class="prod-concern-btn px-3 py-1 rounded-md bg-stone-900 text-white font-medium whitespace-nowrap">
+              Semua
+            </button>
+            <button onclick="filterProductConcern('Kulit Sensitif', this)" data-concern="Kulit Sensitif" class="prod-concern-btn px-3 py-1 rounded-md bg-stone-100 text-stone-600 font-medium whitespace-nowrap hover:bg-stone-200">
+              Kulit Sensitif
+            </button>
+            <button onclick="filterProductConcern('Jerawat & Minyak', this)" data-concern="Jerawat & Minyak" class="prod-concern-btn px-3 py-1 rounded-md bg-stone-100 text-stone-600 font-medium whitespace-nowrap hover:bg-stone-200">
+              Jerawat & Minyak
+            </button>
+            <button onclick="filterProductConcern('Kulit Kering', this)" data-concern="Kulit Kering" class="prod-concern-btn px-3 py-1 rounded-md bg-stone-100 text-stone-600 font-medium whitespace-nowrap hover:bg-stone-200">
+              Kulit Kering & Dehidrasi
+            </button>
+            <button onclick="filterProductConcern('Kusam & Noda Hitam', this)" data-concern="Kusam & Noda Hitam" class="prod-concern-btn px-3 py-1 rounded-md bg-stone-100 text-stone-600 font-medium whitespace-nowrap hover:bg-stone-200">
+              Kusam & Bekas Jerawat
+            </button>
+          </div>
+        </div>
+
+        <!-- Results Counter Indicator -->
+        <div class="flex items-center justify-between text-xs text-stone-500 mb-6">
+          <span id="catalogProductsCount">Memuat katalog...</span>
+          <span class="italic">Klik salah satu produk untuk membuka analisa komposisi</span>
+        </div>
+
+        <!-- Products Grid -->
+        <div id="productsCatalogGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <!-- Populated dynamically via renderProductCatalog() -->
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ========================================================== -->
+    <!-- PAGE 4: BEAUTY QUIZ (AI Skin Diagnostic Simulation)        -->
+    <!-- ========================================================== -->
+    <section id="page-quiz" class="page-view hidden py-12 sm:py-16">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <!-- Quiz Intro Header -->
+        <div class="text-center max-w-2xl mx-auto mb-10">
+          <span class="text-xs font-bold tracking-[0.2em] text-[#845E3D] uppercase block mb-1">
+            SKIN DIAGNOSTIC QUIZ
+          </span>
+          <h1 class="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-stone-900 mb-3">
+            Analisis Kondisi Kulit Personal
+          </h1>
+          <p class="text-xs sm:text-sm text-stone-600 leading-relaxed">
+            Jawab 5 pertanyaan seputar respon kulit, gaya hidup, dan permasalahanmu. Algoritma kami akan memetakan kesehatan barrier dan menyusun rekomendasi rutinitas ideal.
+          </p>
+        </div>
+
+        <!-- QUIZ CONTAINER -->
+        <div id="quizFormContainer" class="bg-white rounded-3xl p-6 sm:p-10 border border-stone-200/90 shadow-sm">
+          
+          <!-- Progress Bar Header -->
+          <div class="mb-8">
+            <div class="flex items-center justify-between text-xs font-semibold text-stone-500 mb-2">
+              <span id="quizProgressText">Pertanyaan 1 dari 5</span>
+              <span class="text-[#845E3D] font-bold">Diagnosa AI</span>
+            </div>
+            <div class="w-full bg-stone-100 h-2 rounded-full overflow-hidden">
+              <div id="quizProgressBar" class="bg-[#25201D] h-full transition-all duration-300 w-1/5"></div>
+            </div>
+          </div>
+
+          <!-- Question Card Container -->
+          <div id="quizQuestionCard">
+            <!-- Dynamically populated via renderQuizStep() -->
+          </div>
+
+        </div>
+
+        <!-- AI PROCESSING ANIMATION (Hidden initially) -->
+        <div id="quizAiLoading" class="hidden bg-white rounded-3xl p-10 sm:p-16 border border-stone-200 text-center shadow-sm">
+          <div class="w-16 h-16 mx-auto rounded-full bg-[#FAF6F0] border-2 border-stone-900 flex items-center justify-center mb-6 pulse-glow">
+            <span class="text-2xl animate-spin">✨</span>
+          </div>
+          <h3 class="font-serif text-2xl font-bold text-stone-900 mb-2">AI Engine Sedang Menganalisis...</h3>
+          <p id="aiLoadingStatus" class="text-xs sm:text-sm text-stone-500 max-w-md mx-auto mb-6 h-10 flex items-center justify-center">
+            Menganalisis matriks lipid & profil pelindung kulit...
+          </p>
+          <div class="w-full max-w-md mx-auto bg-stone-100 h-2 rounded-full overflow-hidden">
+            <div id="aiLoadingBarInner" class="bg-[#25201D] h-full w-1/4 transition-all duration-500"></div>
+          </div>
+        </div>
+
+        <!-- QUIZ RESULT DASHBOARD (Hidden initially) -->
+        <div id="quizResultContainer" class="hidden">
+          <!-- Dynamically populated via renderQuizAnalysisResult() -->
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ========================================================== -->
+  <!-- 5. GLOBAL FOOTER                                           -->
+  <!-- ========================================================== -->
+  <footer class="bg-[#F4EFEA] border-t border-stone-200 mt-20 pt-16 pb-12 text-stone-700">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-10 pb-12 border-b border-stone-200/80">
+        
+        <!-- Brand Info -->
+        <div class="md:col-span-5 space-y-4">
+          <a href="#home" data-nav="home" class="flex items-center gap-2 group text-stone-900">
+            <span class="w-8 h-8 rounded-full border border-stone-800 flex items-center justify-center font-serif text-sm font-semibold">
+              b.
+            </span>
+            <span class="font-serif text-2xl font-bold tracking-tight">
+              beautyguide.
+            </span>
+          </a>
+          <p class="text-xs sm:text-sm text-stone-600 leading-relaxed max-w-sm">
+            Platform edukasi kecantikan dan perawatan diri modern. Didedikasikan untuk membantu setiap individu menemukan rutinitas skincare yang tepat secara objektif, mindful, dan berbasis sains.
+          </p>
+          <div class="pt-2 text-xs text-stone-500">
+            <p>✓ 100% Bebas sponsorship terselubung</p>
+            <p>✓ Fokus pada kesehatan skin barrier jangka panjang</p>
+          </div>
+        </div>
+
+        <!-- Links: Edukasi -->
+        <div class="md:col-span-2 space-y-3">
+          <h4 class="font-bold text-xs uppercase tracking-wider text-stone-900">Edukasi</h4>
+          <ul class="space-y-2 text-xs">
+            <li><a href="#home" onclick="navigateTo('home'); selectIngredient('ceramide');" class="hover:text-stone-900">Skin Barrier 101</a></li>
+            <li><a href="#home" onclick="navigateTo('home'); selectIngredient('retinol');" class="hover:text-stone-900">Panduan Retinol</a></li>
+            <li><a href="#home" onclick="navigateTo('home'); selectIngredient('niacinamide');" class="hover:text-stone-900">Active Ingredients</a></li>
+            <li><a href="#creator" onclick="navigateTo('creator')" class="hover:text-stone-900">Video Creator</a></li>
+          </ul>
+        </div>
+
+        <!-- Links: Platform -->
+        <div class="md:col-span-2 space-y-3">
+          <h4 class="font-bold text-xs uppercase tracking-wider text-stone-900">Platform</h4>
+          <ul class="space-y-2 text-xs">
+            <li><a href="#catalog" onclick="navigateTo('catalog')" class="hover:text-stone-900">Katalog Formula</a></li>
+            <li><a href="#quiz" onclick="navigateTo('quiz')" class="hover:text-stone-900">AI Beauty Quiz</a></li>
+            <li><button onclick="toggleSavedDrawer()" class="hover:text-stone-900 text-left">Formula Tersimpan</button></li>
+            <li><button onclick="openSearchModal()" class="hover:text-stone-900 text-left">Pencarian Cepat</button></li>
+          </ul>
+        </div>
+
+      </div>
+
+      <!-- Copyright & Disclaimer -->
+      <div class="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-stone-500 gap-4">
+        <p>© 2026 beautyguide. Seluruh hak cipta dilindungi.</p>
+        <p class="text-center sm:text-right text-[11px] max-w-lg">
+          Disclaimer: Konten pada website ini ditujukan murni untuk keperluan edukasi dan informasi umum, bukan pengganti konsultasi medis profesional.
+        </p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ========================================================== -->
+  <!-- MODAL 1: VIDEO PLAYER MODAL                                -->
+  <!-- ========================================================== -->
+  <div id="videoModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-stone-950/70 backdrop-blur-xs animate-fade-in">
+    <div class="relative w-full max-w-2xl bg-white rounded-2xl overflow-hidden shadow-2xl modal-content" id="videoModalContent">
+      <!-- Populated via openVideoModal() -->
+    </div>
+  </div>
+
+  <!-- ========================================================== -->
+  <!-- MODAL 2: PRODUCT DETAIL DEEP DIVE MODAL                    -->
+  <!-- ========================================================== -->
+  <div id="productDetailModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-stone-950/70 backdrop-blur-xs animate-fade-in">
+    <div class="relative w-full max-w-3xl bg-white rounded-2xl overflow-hidden shadow-2xl modal-content" id="productDetailContent">
+      <!-- Populated via openProductModal() -->
+    </div>
+  </div>
+
+  <!-- ========================================================== -->
+  <!-- MODAL 3: GLOBAL QUICK SEARCH MODAL (Ctrl+K)                -->
+  <!-- ========================================================== -->
+  <div id="searchModal" class="hidden fixed inset-0 z-50 flex items-start justify-center pt-20 p-4 bg-stone-950/60 backdrop-blur-xs animate-fade-in">
+    <div class="relative w-full max-w-xl bg-white rounded-2xl overflow-hidden shadow-2xl border border-stone-200">
+      <!-- Search Input Header -->
+      <div class="p-4 border-b border-stone-100 flex items-center gap-3">
+        <svg class="w-5 h-5 text-stone-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+        <input 
+          id="globalSearchModalInput" 
+          type="text" 
+          placeholder="Cari bahan aktif, topik video, atau produk edukasi..." 
+          class="w-full text-sm focus:outline-none text-stone-900"
+        />
+        <button onclick="closeSearchModal()" class="text-xs bg-stone-100 px-2 py-1 rounded text-stone-500 hover:text-stone-900">
+          ESC
+        </button>
+      </div>
+
+      <!-- Search Results Box -->
+      <div id="globalSearchResults" class="p-4 max-h-[60vh] overflow-y-auto">
+        <!-- Rendered via runGlobalSearch() -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================== -->
+  <!-- DRAWER: SAVED FORMULAS / FAVORITES (Right Side Slide-out)   -->
+  <!-- ========================================================== -->
+  <div id="savedDrawer" class="hidden fixed inset-0 z-50 overflow-hidden">
+    <!-- Backdrop -->
+    <div onclick="toggleSavedDrawer()" class="absolute inset-0 bg-stone-950/50 backdrop-blur-xs"></div>
+    
+    <div class="absolute inset-y-0 right-0 max-w-full flex pl-10">
+      <div class="w-screen max-w-md bg-white shadow-2xl flex flex-col justify-between">
+        
+        <!-- Drawer Header -->
+        <div class="p-6 border-b border-stone-100 flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <span class="text-rose-500 text-lg">♥</span>
+            <h3 class="font-serif text-lg font-bold text-stone-900">Formula Tersimpan</h3>
+          </div>
+          <button onclick="toggleSavedDrawer()" class="p-2 text-stone-400 hover:text-stone-700 rounded-full">
+            ✕
+          </button>
+        </div>
+
+        <!-- Saved Items List -->
+        <div id="savedDrawerList" class="p-6 space-y-3 flex-1 overflow-y-auto">
+          <!-- Dynamically rendered -->
+        </div>
+
+        <!-- Drawer Footer -->
+        <div class="p-6 border-t border-stone-100 bg-stone-50 flex items-center justify-between">
+          <button onclick="toggleSavedDrawer(); navigateTo('catalog')" class="w-full py-3 bg-stone-900 text-white rounded-xl text-xs font-semibold text-center hover:bg-stone-800 transition-colors">
+            Eksplor Katalog Lebih Banyak →
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
