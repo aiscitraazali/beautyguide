@@ -671,7 +671,7 @@ function renderProductCardHTML(p) {
       <!-- Footer Action -->
       <div class="px-5 pb-5 pt-3 border-t border-stone-100 flex items-center justify-between">
         <div>
-          <span class="block text-[10px] text-stone-400 uppercase tracking-wider font-medium">Estimasi Edukasi</span>
+          <span class="block text-[10px] text-stone-400 uppercase tracking-wider font-medium">Estimasi Harga</span>
           <span class="font-semibold text-xs sm:text-sm text-stone-900">${p.priceEst}</span>
         </div>
         <button 
