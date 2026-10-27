@@ -647,7 +647,6 @@ function renderProductCardHTML(p) {
         <div class="p-5">
           <div class="flex items-center justify-between text-xs text-stone-500 mb-1">
             <span class="uppercase tracking-wider font-semibold text-stone-400">${p.brand}</span>
-            <span class="text-amber-600 font-medium">★ ${p.rating} (${p.reviewsCount})</span>
           </div>
 
           <h3 class="font-serif text-lg font-bold text-stone-900 mb-2 leading-snug group-hover:text-[#A67C52] transition-colors">
@@ -773,7 +772,6 @@ function openProductModal(productId) {
 
         <h2 class="font-serif text-2xl font-bold text-stone-900 mb-2">${p.name}</h2>
         <div class="flex items-center gap-4 text-xs text-stone-600 mb-4 pb-4 border-b border-stone-100">
-          <span>★ ${p.rating} / 5.0 (${p.reviewsCount} Ulasan Edukatif)</span>
           <span>•</span>
           <span>Ukuran: ${p.size}</span>
           <span>•</span>
