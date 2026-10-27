@@ -356,6 +356,27 @@ const SKINCARE_DATA = {
       whenToUse: 'Pagi & Malam',
       avoidCombine: 'Tidak ada pantangan.',
       whyWeLoveIt: 'Mencegah jerawat baru muncul dan tidak membuat kulit kencang seperti ditarik.'
+    },
+
+    {
+      id: 'p9',
+      name: 'Sunscreen',
+      brand: 'Skin1004',
+      category: 'Skin Protecting',
+      skinTypes: ['Berminyak', 'Berjerawat', 'Kombinasi'],
+      concerns: ['Jerawat & Minyak', 'Kusam & Noda Hitam'],
+      image: 'assets/images/skin1004 sun serum.jpeg',
+      rating: 5.0,
+      reviewsCount: 220,
+      priceEst: 'Rp 150.000',
+      size: '50 ml',
+      badge: 'Low pH Sunscreen',
+      keyIngredients: ['Tea Tree Extract', 'Low Betaine Salicylate', 'Allantoin'],
+      shortDesc: 'Pembersih berbusa halus lembut khusus kulit rentan jerawat, membersihkan sisa kotoran tanpa mengikis kelembapan alami.',
+      howToUse: 'Pijat lembut ke wajah basah selama 60 detik terutama di area hidung dan dagu.',
+      whenToUse: 'Pagi & Malam',
+      avoidCombine: 'Tidak ada pantangan.',
+      whyWeLoveIt: 'Mencegah jerawat baru muncul dan tidak membuat kulit kencang seperti ditarik.'
     }
   ],
 
