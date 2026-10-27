@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
   <title>beautyguide. — Your Personal Skincare, Beauty & Self-Care Educational Platform</title>
   <meta name="description" content="Platform edukasi modern seputar perawatan diri, skincare, panduan creator, formula bahan aktif, dan kuis diagnosis kondisi kulit AI.">
   
@@ -825,11 +826,12 @@
   <!-- ========================================================== -->
   <!-- MODAL 1: VIDEO PLAYER MODAL                                -->
   <!-- ========================================================== -->
-  <div id="videoModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-stone-950/70 backdrop-blur-xs animate-fade-in">
-    <div class="relative w-full max-w-2xl bg-white rounded-2xl overflow-hidden shadow-2xl modal-content" id="videoModalContent">
+  <div id="videoModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-stone-950/75 backdrop-blur-xs animate-fade-in" onclick="if(event.target === this) closeVideoModal()">
+    <div class="relative w-full max-w-3xl bg-white rounded-2xl overflow-hidden shadow-2xl modal-content border border-stone-200/50" id="videoModalContent">
       <!-- Populated via openVideoModal() -->
     </div>
   </div>
+
 
   <!-- ========================================================== -->
   <!-- MODAL 2: PRODUCT DETAIL DEEP DIVE MODAL                    -->

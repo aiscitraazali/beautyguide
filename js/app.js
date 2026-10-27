@@ -267,24 +267,30 @@ function renderVideoCardHTML(video) {
   return `
     <div class="bg-white rounded-2xl overflow-hidden border border-stone-200/90 card-hover flex flex-col group cursor-pointer" onclick="openVideoModal('${video.id}')">
       <!-- Thumbnail with Overlay -->
-      <div class="relative aspect-video w-full overflow-hidden bg-stone-100">
+      <div class="relative aspect-video w-full overflow-hidden bg-stone-900">
         <img 
           src="${video.thumbnail}" 
           alt="${video.title}" 
-          class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-          onerror="this.src='assets/images/hero.jpg'"
+          class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-95 group-hover:opacity-100"
+          onerror="this.src='https://i.ytimg.com/vi/${video.youtubeId}/hqdefault.jpg'"
         />
-        <div class="absolute inset-0 bg-stone-950/20 group-hover:bg-stone-950/40 transition-colors flex items-center justify-center">
-          <div class="w-12 h-12 rounded-full bg-white/90 text-stone-900 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+        <!-- Hover Gradient & YouTube Play Button -->
+        <div class="absolute inset-0 bg-stone-950/25 group-hover:bg-stone-950/45 transition-colors flex items-center justify-center">
+          <div class="w-12 h-12 rounded-full bg-red-600 text-white flex items-center justify-center shadow-xl group-hover:scale-110 group-hover:bg-red-500 transition-all duration-300">
             <svg class="w-5 h-5 ml-0.5 fill-current" viewBox="0 0 24 24">
               <path d="M8 5v14l11-7z"/>
             </svg>
           </div>
         </div>
-        <span class="absolute bottom-3 right-3 bg-stone-900/80 backdrop-blur-xs text-white text-xs px-2 py-0.5 rounded font-medium">
+
+        <!-- YouTube Duration Badge -->
+        <span class="absolute bottom-3 right-3 bg-stone-900/85 backdrop-blur-xs text-white text-xs px-2 py-0.5 rounded font-medium flex items-center gap-1.5 shadow-sm">
+          <svg class="w-3.5 h-3.5 text-red-500 fill-current shrink-0" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
           ${video.duration}
         </span>
-        <span class="absolute top-3 left-3 badge-pill bg-white/95 text-stone-900 border-none shadow-xs font-semibold">
+
+        <!-- Category Badge -->
+        <span class="absolute top-3 left-3 badge-pill bg-white/95 text-stone-900 border-none shadow-xs font-semibold text-[11px]">
           ${video.badge}
         </span>
       </div>
@@ -296,25 +302,47 @@ function renderVideoCardHTML(video) {
             <span class="font-medium text-[#A67C52]">${video.category}</span>
             <span>${video.views}</span>
           </div>
-          <h4 class="font-serif text-base sm:text-lg font-semibold text-stone-900 line-clamp-2 mb-3 leading-snug group-hover:text-[#A67C52] transition-colors">
+          <h4 class="font-serif text-base sm:text-lg font-semibold text-stone-900 line-clamp-2 mb-2 leading-snug group-hover:text-[#A67C52] transition-colors">
             ${video.title}
           </h4>
-          <p class="text-xs text-stone-600 line-clamp-2 mb-4 leading-relaxed">
+          <p class="text-xs text-stone-600 line-clamp-2 mb-3 leading-relaxed">
             ${video.summary}
           </p>
+
+          <!-- Direct YouTube Link Button -->
+          <div class="mb-3">
+            <a 
+              href="${video.youtubeUrl}" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              onclick="event.stopPropagation()" 
+              class="inline-flex items-center gap-1.5 text-[11px] font-semibold text-rose-600 hover:text-white bg-rose-50 hover:bg-rose-600 px-2.5 py-1 rounded-md transition-all duration-200 border border-rose-200/60"
+              title="Buka langsung link YouTube di tab baru"
+            >
+              <svg class="w-3.5 h-3.5 fill-current shrink-0" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+              <span>Tonton di YouTube</span>
+              <span class="text-xs">↗</span>
+            </a>
+          </div>
         </div>
 
-        <!-- Creator Profile -->
-        <div class="pt-3 border-t border-stone-100 flex items-center gap-3">
-          <img 
-            src="${video.creatorAvatar}" 
-            alt="${video.creator}" 
-            class="w-8 h-8 rounded-full object-cover border border-stone-200"
-          />
-          <div class="overflow-hidden">
-            <p class="text-xs font-semibold text-stone-900 truncate">${video.creator}</p>
-            <p class="text-[11px] text-stone-500 truncate">${video.creatorRole}</p>
+        <!-- Creator Profile & Play Indicator -->
+        <div class="pt-3 border-t border-stone-100 flex items-center justify-between">
+          <div class="flex items-center gap-3 overflow-hidden">
+            <img 
+              src="${video.creatorAvatar}" 
+              alt="${video.creator}" 
+              class="w-8 h-8 rounded-full object-cover border border-stone-200"
+            />
+            <div class="overflow-hidden">
+              <p class="text-xs font-semibold text-stone-900 truncate">${video.creator}</p>
+              <p class="text-[11px] text-stone-500 truncate">${video.creatorRole}</p>
+            </div>
           </div>
+          <span class="shrink-0 text-xs font-semibold text-[#845E3D] group-hover:text-stone-900 flex items-center gap-1 transition-colors">
+            Putar
+            <span class="text-[11px]">▶</span>
+          </span>
         </div>
       </div>
     </div>
@@ -329,51 +357,126 @@ function openVideoModal(videoId) {
   const modal = document.getElementById('videoModal');
   const container = document.getElementById('videoModalContent');
 
+  const isFileProtocol = window.location.protocol === 'file:';
+
+  // Video player stage HTML
+  let playerStageHtml = '';
+  if (isFileProtocol) {
+    playerStageHtml = `
+      <div id="videoPlayerStage" class="relative aspect-video w-full bg-stone-950 rounded-t-2xl overflow-hidden flex flex-col justify-between group">
+        <img 
+          src="${video.thumbnail}" 
+          alt="${escapeHtml(video.title)}" 
+          class="absolute inset-0 w-full h-full object-cover opacity-50 group-hover:scale-105 transition-transform duration-700" 
+          onerror="this.src='https://i.ytimg.com/vi/${video.youtubeId}/hqdefault.jpg'"
+        />
+        
+        <!-- Top bar overlay -->
+        <div class="relative z-10 p-4 flex items-center justify-between text-white bg-linear-to-b from-stone-950/80 to-transparent">
+          <span class="badge-pill bg-white/20 text-white border-none backdrop-blur-xs text-[11px]">${video.category}</span>
+          <button onclick="closeVideoModal()" class="w-8 h-8 rounded-full bg-black/50 text-white flex items-center justify-center hover:bg-black/80 transition-colors" title="Tutup">
+            ✕
+          </button>
+        </div>
+
+        <!-- Center Action -->
+        <div class="relative z-10 text-center text-white px-4">
+          <a 
+            href="${video.youtubeUrl}" 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            class="inline-flex flex-col items-center group/play cursor-pointer"
+          >
+            <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-red-600 text-white flex items-center justify-center shadow-2xl mb-3 group-hover/play:scale-110 group-hover/play:bg-red-500 transition-all duration-300">
+              <svg class="w-8 h-8 sm:w-9 sm:h-9 ml-1 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            </div>
+            <span class="px-5 py-2.5 rounded-full bg-stone-900/90 text-white text-xs sm:text-sm font-semibold hover:bg-stone-800 transition-colors inline-flex items-center gap-2 border border-white/20 shadow-lg">
+              <svg class="w-4 h-4 fill-red-500" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+              Putar Video di YouTube ↗
+            </span>
+          </a>
+        </div>
+
+      </div>
+    `;
+  } else {
+    playerStageHtml = `
+      <div id="videoPlayerStage" class="relative aspect-video w-full bg-black rounded-t-2xl overflow-hidden shadow-2xl">
+        <iframe 
+          src="https://www.youtube-nocookie.com/embed/${video.youtubeId}?autoplay=1&rel=0&modestbranding=1" 
+          title="${escapeHtml(video.title)}" 
+          class="w-full h-full border-0" 
+          referrerpolicy="strict-origin-when-cross-origin"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+          allowfullscreen>
+        </iframe>
+      </div>
+    `;
+  }
+
   container.innerHTML = `
-    <!-- Mock Video Player Screen -->
-    <div class="relative aspect-video w-full bg-stone-950 rounded-t-2xl overflow-hidden flex flex-col justify-between">
-      <img src="${video.thumbnail}" alt="${video.title}" class="absolute inset-0 w-full h-full object-cover opacity-60" />
-      <div class="relative z-10 p-4 flex items-center justify-between text-white bg-linear-to-b from-stone-900/80 to-transparent">
-        <span class="badge-pill bg-white/20 text-white border-none">${video.category}</span>
-        <button onclick="closeVideoModal()" class="w-8 h-8 rounded-full bg-black/40 text-white flex items-center justify-center hover:bg-black/80 transition-colors">
-          ✕
+    <!-- Video Player Stage -->
+    ${playerStageHtml}
+
+    <!-- Video Notes & Summary -->
+    <div class="p-6 bg-white rounded-b-2xl max-h-[55vh] overflow-y-auto">
+      <!-- Top Bar: Creator Info & External YouTube Action -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-stone-100 mb-4">
+        <div class="flex items-center gap-3">
+          <img src="${video.creatorAvatar}" alt="${video.creator}" class="w-11 h-11 rounded-full object-cover border border-stone-200" />
+          <div>
+            <h3 class="font-semibold text-stone-900 text-sm sm:text-base">${video.creator}</h3>
+            <p class="text-xs text-stone-500">${video.creatorRole} · ${video.views}</p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <a 
+            href="${video.youtubeUrl}" 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-red-600 hover:bg-red-700 text-white text-xs font-semibold transition-colors shadow-xs"
+          >
+            <svg class="w-4 h-4 fill-current shrink-0" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+            Buka di YouTube ↗
+          </a>
+          <button onclick="closeVideoModal()" class="w-9 h-9 rounded-xl bg-stone-100 text-stone-600 hover:bg-stone-200 hover:text-stone-900 flex items-center justify-center transition-colors text-sm font-bold" title="Tutup">
+            ✕
+          </button>
+        </div>
+      </div>
+
+      <!-- Video Title & Category -->
+      <div class="mb-3">
+        <div class="flex items-center gap-2 flex-wrap mb-2">
+          <span class="inline-block px-2.5 py-1 rounded-full text-[11px] font-semibold bg-[#FAF4ED] text-[#845E3D] border border-[#EBDDCF]">
+            ${video.category}
+          </span>
+          <span class="inline-block px-2.5 py-1 rounded-full text-[11px] font-semibold bg-stone-100 text-stone-700">
+            ${video.badge}
+          </span>
+          <span class="text-xs text-stone-400 font-mono">${video.duration}</span>
+        </div>
+        <h2 class="font-serif text-xl sm:text-2xl font-bold text-stone-900 leading-snug">${video.title}</h2>
+      </div>
+
+      <!-- YouTube URL Quick Info & Copy -->
+      <div class="p-3 mb-4 rounded-xl bg-stone-50 border border-stone-200/80 flex items-center justify-between text-xs text-stone-600 gap-2">
+        <div class="flex items-center gap-2 overflow-hidden truncate">
+          <span class="font-semibold text-stone-800 shrink-0">Link Video:</span>
+          <a href="${video.youtubeUrl}" target="_blank" rel="noopener noreferrer" class="text-rose-600 hover:underline truncate">${video.youtubeUrl}</a>
+        </div>
+        <button onclick="copyToClipboard('${video.youtubeUrl}')" class="shrink-0 px-2.5 py-1 text-[11px] font-medium rounded-lg bg-white border border-stone-200 hover:bg-stone-100 text-stone-700 transition-colors shadow-2xs">
+          Salin Link
         </button>
       </div>
 
-      <!-- Play Simulation overlay -->
-      <div class="relative z-10 text-center text-white px-4">
-        <div class="w-16 h-16 mx-auto rounded-full bg-white/90 text-stone-900 flex items-center justify-center shadow-xl mb-3 cursor-pointer hover:scale-105 transition-transform" onclick="simulatePlayVideo(this)">
-          <svg class="w-7 h-7 ml-1 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-        </div>
-        <p class="text-sm font-medium tracking-wide">Klik untuk Memutar Edukasi Video</p>
-      </div>
-
-      <!-- Player Controls Bar -->
-      <div class="relative z-10 p-3 bg-linear-to-t from-stone-950/90 to-transparent text-white flex items-center gap-3 text-xs">
-        <div class="w-full bg-stone-700 h-1.5 rounded-full overflow-hidden">
-          <div class="bg-[#C49A78] h-full w-1/3"></div>
-        </div>
-        <span class="font-mono">${video.duration}</span>
-      </div>
-    </div>
-
-    <!-- Video Notes & Summary -->
-    <div class="p-6 bg-white rounded-b-2xl max-h-[60vh] overflow-y-auto">
-      <div class="flex items-center gap-3 mb-4">
-        <img src="${video.creatorAvatar}" alt="${video.creator}" class="w-11 h-11 rounded-full object-cover border border-stone-200" />
-        <div>
-          <h3 class="font-semibold text-stone-900 text-sm sm:text-base">${video.creator}</h3>
-          <p class="text-xs text-stone-500">${video.creatorRole} · ${video.views}</p>
-        </div>
-      </div>
-
-      <h2 class="font-serif text-xl sm:text-2xl font-bold text-stone-900 mb-3">${video.title}</h2>
       <p class="text-sm text-stone-600 leading-relaxed mb-5 bg-[#FAF7F2] p-4 rounded-xl border border-stone-200/80">
         ${video.summary}
       </p>
 
       <h4 class="font-semibold text-stone-900 text-sm mb-3 flex items-center gap-2">
-        <span class="text-emerald-600">✓</span> Rangkuman Poin Kunci (Key Takeaways):
+        <span class="text-emerald-600 font-bold">✓</span> Rangkuman Poin Kunci (Key Takeaways):
       </h4>
       <ul class="space-y-2 mb-6">
         ${video.takeaways.map(t => `
@@ -386,7 +489,7 @@ function openVideoModal(videoId) {
 
       <div class="flex flex-wrap gap-3 pt-3 border-t border-stone-100 justify-end">
         <button onclick="closeVideoModal()" class="px-5 py-2.5 rounded-full text-xs font-semibold bg-stone-100 text-stone-700 hover:bg-stone-200 transition-colors">
-          Tutup Panduan
+          Tutup Pemutar
         </button>
         <button onclick="closeVideoModal(); navigateTo('catalog');" class="px-5 py-2.5 rounded-full text-xs font-semibold bg-stone-900 text-white hover:bg-stone-800 transition-colors">
           Eksplor Produk Terkait di Katalog →
@@ -398,18 +501,66 @@ function openVideoModal(videoId) {
   modal.classList.remove('hidden');
 }
 
-function simulatePlayVideo(buttonEl) {
-  buttonEl.innerHTML = `<span class="animate-spin text-xl">⏳</span>`;
-  showToast('Memutar video simulasi edukasi...', 'info');
-  setTimeout(() => {
-    buttonEl.innerHTML = `<svg class="w-7 h-7 fill-current" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>`;
-  }, 600);
+function copyToClipboard(text) {
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(text).then(() => {
+      showToast('Link YouTube berhasil disalin ke clipboard!', 'success');
+    }).catch(() => {
+      fallbackCopy(text);
+    });
+  } else {
+    fallbackCopy(text);
+  }
+}
+
+function fallbackCopy(text) {
+  const textArea = document.createElement('textarea');
+  textArea.value = text;
+  textArea.style.position = 'fixed';
+  textArea.style.left = '-999999px';
+  document.body.appendChild(textArea);
+  textArea.focus();
+  textArea.select();
+  try {
+    document.execCommand('copy');
+    showToast('Link YouTube berhasil disalin ke clipboard!', 'success');
+  } catch (err) {
+    showToast('Silakan salin manual: ' + text, 'info');
+  }
+  document.body.removeChild(textArea);
 }
 
 function closeVideoModal() {
   const modal = document.getElementById('videoModal');
   if (modal) modal.classList.add('hidden');
+  const container = document.getElementById('videoModalContent');
+  if (container) container.innerHTML = '';
   appState.activeVideo = null;
+}
+
+function loadYouTubeIframe(youtubeId, title) {
+  const stage = document.getElementById('videoPlayerStage');
+  if (!stage) return;
+  stage.innerHTML = `
+    <iframe 
+      src="https://www.youtube-nocookie.com/embed/${youtubeId}?autoplay=1&rel=0&modestbranding=1" 
+      title="${title}" 
+      class="w-full h-full border-0" 
+      referrerpolicy="strict-origin-when-cross-origin"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+      allowfullscreen>
+    </iframe>
+  `;
+}
+
+function escapeHtml(str) {
+  if (!str) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
 }
 
 // ==========================================
